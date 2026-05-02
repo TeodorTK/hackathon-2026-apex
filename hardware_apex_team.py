@@ -3,7 +3,7 @@
 Raspberry Pi 5 — autonomous mode (default): dedicated threads on core 2 (sensors + actuators + logic),
 core 3 (WebSocket TX), core 4 (WebSocket RX). Starts directly without the menu.
 
-Optional test menu:  python3 hardware_test_menu.py --menu
+Optional test menu:  python3 hardware_apex_team.py --menu
 
 Dependencies: pip install gpiozero websockets
   + adafruit-blinka, adafruit-circuitpython-dht, bmp280, mpu6050
@@ -1465,8 +1465,8 @@ def main() -> int:
             "Raspberry Pi 5 hardware (autonomous)\n\n"
             "  (default)  Core 2 = sensors + logic, Core 3 = WebSocket TX, Core 4 = WebSocket RX\n"
             "  no menu; starts the multicore + WebSocket runtime immediately.\n\n"
-            "  python3 hardware_test_menu.py        autonomous mode (recommended)\n"
-            "  python3 hardware_test_menu.py --menu  interactive test menu\n"
+            "  python3 hardware_apex_team.py        autonomous mode (recommended)\n"
+            "  python3 hardware_apex_team.py --menu  interactive test menu\n"
         )
         return 0
 

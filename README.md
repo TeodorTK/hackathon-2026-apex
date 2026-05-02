@@ -14,20 +14,30 @@ We treat the stack like a mini race setup:
 
 So the Pi is not “just a demo board”: in our narrative it is the **on-car brain** that sees the physical world; the ESP32 is the **radio bridge** to the pit; the PC is where **heavy logic and UX** live.
 
-## Electrical schematic (GPIO overview)
+## Electrical schematics
 
-The diagram below matches the **BCM GPIO** numbers used in `hardware_test_menu.py` (buttons, LDR/MQ135, fan, buzzer, servo, RGB LED, DHT22, I2C sensors). Always add **proper drivers, current limits, and level shifting** for your real hardware — this is a **reference map**, not a full power/safety design.
+### Quick GPIO reference (software defaults)
+
+The diagram below matches the **BCM GPIO** numbers wired in **`hardware_apex_team.py`** by default (buttons, LDR/MQ135-style inputs, fan, buzzer, servo, RGB LED, DHT22, I2C sensors). Always use **proper drivers, current limits, and protection** for real loads — treat this as a **compact reference**, not a complete power/safety sign-off.
 
 ![Apex Team — RPi5 sensor and actuator wiring (BCM GPIO)](assets/electrical_schematic.png)
 
-## What this codebase actually runs (`hardware_test_menu.py`)
+### Apex hardware schematic (detailed design)
+
+This is the **team’s full electrical schematic** (components such as Raspberry Pi connector **J1**, BMP280 **U2**, DHT22 **U1**, accelerometer **U4**, MQ-135 **U5**, RGB LED **D1**, buzzer **BZ1**, fan **M2**, servo **M1**, switches **SW1/SW2**, and driver stages **Q1/Q2**). Use it for PCB bring-up and bench debugging.
+
+If any **BCM pin** here differs from the defaults in `hardware_apex_team.py`, align either the wiring or **`servo_bcm` / GPIO usage** in code and config (`test_params.json`) so software and hardware stay in sync.
+
+![Apex — detailed electrical schematic](Apex_Schematics.png)
+
+## What this codebase actually runs (`hardware_apex_team.py`)
 
 The main script is a **Python 3** program for Raspberry Pi OS that does two things:
 
 1. **Autonomous mode (default)** — start it with:
 
    ```bash
-   python3 hardware_test_menu.py
+   python3 hardware_apex_team.py
    ```
 
    It launches a **multi-process** runtime (see next section) so sampling, telemetry, and command handling stay responsive. CPU cores can be **pinned per role** via `test_params.json`.
@@ -35,7 +45,7 @@ The main script is a **Python 3** program for Raspberry Pi OS that does two thin
 2. **Interactive hardware test menu** — for bench checks before you trust the car:
 
    ```bash
-   python3 hardware_test_menu.py --menu
+   python3 hardware_apex_team.py --menu
    ```
 
    You can exercise RGB LED, DHT22, I2C baro/IMU, buttons, fan, buzzer, servo, LDR/MQ135, optional single-process WebSocket streaming, and the same **multi-process** runtime used in autonomous mode.
@@ -120,10 +130,11 @@ Exact package names may vary slightly by distro; the source file header lists th
 
 ## Project layout (minimal)
 
-- **`hardware_test_menu.py`** — runtime, test menu, WebSocket TX/RX processes, GPIO/sensor loop, command handling.
+- **`hardware_apex_team.py`** — runtime, test menu, WebSocket TX/RX processes, GPIO/sensor loop, command handling.
 - **`test_params.json`** — timing, ports, core preferences, servo pin, logging flags (auto-generated if missing).
 - **`test_results.json`** — optional log of menu test outcomes and runtime metadata (when tests or runtime write to it).
-- **`assets/electrical_schematic.png`** — GPIO reference diagram for this README.
+- **`assets/electrical_schematic.png`** — simplified GPIO reference diagram (matches default script pins).
+- **`Apex_Schematics.png`** — full Apex hardware schematic (KiCad / team design).
 
 ## One-line summary
 
