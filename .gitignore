@@ -1,0 +1,12 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+.DS_Store
+*.egg-info/
+.pytest_cache/
+
+# Generated on the Pi (optional — remove these lines if you want them in the repo)
+test_params.json
+test_results.json
